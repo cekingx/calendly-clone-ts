@@ -29,13 +29,13 @@ export class TimeRange {
   }
 
   private translate(second: number): string {
-    const ONE_HOUR = 60 + 60;
-    const ONE_MINUTE = 60;
-    const hour = Math.floor(second / ONE_HOUR);
-    const hourString = hour.toString().padStart(2, '0');
-    const minute = Math.floor((second % ONE_HOUR) / ONE_MINUTE);
-    const minuteString = minute.toString().padStart(2, '0');
+    // UTC timestamp
+    const time = new Date(0);
+    // convert second to milisecond
+    time.setTime(second * 1000);
+    const hour = time.getUTCHours().toString().padStart(2, '0')
+    const minute = time.getUTCMinutes().toString().padStart(2, '0')
 
-    return `${hourString}:${minuteString}`;
+    return `${hour}:${minute}`;
   }
 }
