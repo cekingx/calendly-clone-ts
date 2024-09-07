@@ -16,7 +16,7 @@ class DateRange {
   end: Date;
 }
 
-class TimeRange {
+export class TimeRange {
   start: number;
   end: number;
 
@@ -29,6 +29,13 @@ class TimeRange {
   }
 
   private translate(second: number): string {
-    return '09:00';
+    const ONE_HOUR = 60 + 60;
+    const ONE_MINUTE = 60;
+    const hour = Math.floor(second / ONE_HOUR);
+    const hourString = hour.toString().padStart(2, '0');
+    const minute = Math.floor((second % ONE_HOUR) / ONE_MINUTE);
+    const minuteString = minute.toString().padStart(2, '0');
+
+    return `${hourString}:${minuteString}`;
   }
 }

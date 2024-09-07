@@ -1,4 +1,4 @@
-import { Schedule } from "./schedule";
+import { Schedule } from "./core/schedule";
 
 class SlotParams {
   month: Date;
