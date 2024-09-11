@@ -30,6 +30,13 @@ export class TimeRange {
   start: number;
   end: number;
 
+  static create(start: number, end: number): TimeRange {
+    const timerange = new TimeRange();
+    timerange.start = start;
+    timerange.end = end;
+    return timerange;
+  }
+
   getStart(): string {
     return this.translate(this.start);
   }

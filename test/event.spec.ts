@@ -1,5 +1,6 @@
 import { Event } from "../src/core/event";
 import { DAY, Schedule, TimeRange } from "../src/core/schedule";
+import { ONE_HOUR } from "../src/core/utils";
 
 describe('Event', () => {
   describe('end of month', () => {
@@ -41,12 +42,8 @@ describe('Event', () => {
 
   describe('available slot', () => {
     it('should get 4 slot when the available time only monday at 17:00', () => {
-      const hour = new TimeRange()
-      hour.start = 17 * 60 * 60;
-      hour.end = 18 * 60 * 60;
-
       const schedule = new Schedule();
-      const startDate = new Date(0)
+      const startDate = new Date('2024-08')
       const endDate = new Date(startDate.setDate(30));
       schedule.dateRange = {
         start: startDate,
@@ -56,7 +53,7 @@ describe('Event', () => {
         {
           day: DAY.MONDAY,
           hours: [
-            hour
+            TimeRange.create(17 * ONE_HOUR, 18 * ONE_HOUR)
           ]
         }
       ]
@@ -66,7 +63,9 @@ describe('Event', () => {
       event.name = 'Test name'
       event.schedule = schedule
 
-      console.log('event', JSON.stringify(event, null, 2))
+      const result = event.getAvailableSlots({month: new Date('2024-08')})
+      console.log('result', JSON.stringify(result, null, 2))
+      // console.log('event', JSON.stringify(event, null, 2))
     })
   })
 })
