@@ -31,30 +31,6 @@ export class Event {
     const result = []
     const dayInSlotParam = this.getDayInSlotParam(param);
 
-    // if(param.date) {
-    //   const available: AvailableDay = {
-    //     date: new Date(param.date),
-    //     slots: []
-    //   }
-
-    //   for(const availability of this.schedule.availableHours) {
-    //     if(dayOfDate(param.date) == availability.day) {
-    //       for(const hour of availability.hours) {
-    //         const slot = new Slot()
-    //         slot.start = new Date(param.date.getTime() + hour.start)
-    //         slot.duration = this.duration
-    //         available.slots.push(slot)
-    //       }
-    //     }
-    //   }
-
-    //   if(available.slots.length > 0) {
-    //     return [available]
-    //   } 
-
-    //   return []
-    // }
-
     for (const day of dayInSlotParam) {
       for (const availability of this.schedule.availableHours) {
         if (availability.day == dayOfDate(day)) {
