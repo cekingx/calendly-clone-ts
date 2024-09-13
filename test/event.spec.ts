@@ -2,16 +2,6 @@ import { AvailableDay, Event } from "../src/core/event";
 import { DAY, Schedule, TimeRange } from "../src/core/schedule";
 import { ONE_HOUR } from "../src/core/utils";
 
-function createRange(start: number, end: number): number[] {
-  const range = [];
-  while(start <= end) {
-    range.push(start);
-    start += 1;
-  }
-
-  return range
-}
-
 describe('Event', () => {
   describe('end of month', () => {
     it('should get end of month january', () => {
@@ -54,34 +44,55 @@ describe('Event', () => {
   })
 
   describe('available slot', () => {
-    it('should get 4 slot when the available time only monday at 17:00', () => {
-      const schedule = new Schedule();
-      const startDate = new Date(Date.UTC(2024, 7, 1));
-      const endDate = new Date(startDate.setDate(30));
-      schedule.dateRange = {
-        start: startDate,
-        end: endDate,
+    const schedule = new Schedule();
+    const startDate = new Date(Date.UTC(2024, 7, 1));
+    const endDate = new Date(startDate.setDate(30));
+    schedule.dateRange = {
+      start: startDate,
+      end: endDate,
+    }
+    schedule.availableHours = [
+      {
+        day: DAY.MONDAY,
+        hours: [
+          TimeRange.create(17 * ONE_HOUR, 18 * ONE_HOUR)
+        ]
       }
+    ]
+
+    const event = new Event();
+    event.duration = ONE_HOUR;
+    event.name = 'Test name'
+    event.schedule = schedule
+
+    it('should get 4 day with empty slot when the available day only moday', () => {
+      const result = event.getAvailableSlots({month: new Date('2024-08')})
+      expect(result).not.toBeInstanceOf(Error)
+      expect((result as AvailableDay[]).length).toEqual(4)
+    })
+
+    it('should get 2 slot in specific date', () => {
       schedule.availableHours = [
         {
           day: DAY.MONDAY,
           hours: [
+            TimeRange.create(9 * ONE_HOUR, 10 * ONE_HOUR),
             TimeRange.create(17 * ONE_HOUR, 18 * ONE_HOUR)
           ]
         }
       ]
-
-      const event = new Event();
-      event.duration = 60 * 60 * 1000;
-      event.name = 'Test name'
       event.schedule = schedule
 
-      const result = event.getAvailableSlots({month: new Date('2024-08')})
+      const result = event.getAvailableSlots({month: new Date('2024-08'), date: new Date('2024-08-05')})
       expect(result).not.toBeInstanceOf(Error)
-      expect((result as AvailableDay[]).length).toEqual(4)
-      expect((result as AvailableDay[])[0].slots.length).toEqual(1)
-      expect((result as AvailableDay[])[0].slots[0].start).toEqual(new Date(Date.UTC(2024, 7, 5, 17, 0, 0)))
-      expect((result as AvailableDay[])[0].slots[0].getEnd()).toEqual(new Date(Date.UTC(2024, 7, 5, 18, 0, 0)))
+      expect((result as AvailableDay[]).length).toEqual(1)
+      expect((result as AvailableDay[])[0].slots.length).toEqual(2)
+    })
+
+    it('should get 0 slot in specific date', () => {
+      const result = event.getAvailableSlots({month: new Date('2024-08'), date: new Date('2024-08-06')})
+      expect(result).not.toBeInstanceOf(Error)
+      expect((result as AvailableDay[]).length).toEqual(0)
     })
   })
 })

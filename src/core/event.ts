@@ -30,23 +30,37 @@ export class Event {
   getAvailableSlots(param: SlotParams): AvailableDay[] | Error {
     const result = []
     const dayInSlotParam = this.getDayInSlotParam(param);
-    const availableDay = this.schedule.availableHours.map((availability) => {
-      return availability
-    })
+
+    if(param.date) {
+      const available: AvailableDay = {
+        date: new Date(param.date),
+        slots: []
+      }
+
+      for(const availability of this.schedule.availableHours) {
+        if(dayOfDate(param.date) == availability.day) {
+          for(const hour of availability.hours) {
+            const slot = new Slot()
+            slot.start = new Date(param.date.getTime() + hour.start)
+            slot.duration = this.duration
+            available.slots.push(slot)
+          }
+        }
+      }
+
+      if(available.slots.length > 0) {
+        return [available]
+      } 
+
+      return []
+    }
 
     for (const day of dayInSlotParam) {
-      for (const availability of availableDay) {
+      for (const availability of this.schedule.availableHours) {
         if (availability.day == dayOfDate(day)) {
           const available: AvailableDay = {
             date: new Date(day),
             slots: []
-          }
-          for (const timerange of availability.hours) {
-            const start = new Date(day.getTime() + timerange.start);
-            const slot = new Slot();
-            slot.start = start;
-            slot.duration = this.duration;
-            available.slots.push(slot)
           }
 
           result.push(available)
@@ -72,6 +86,7 @@ export class Event {
       result.push(new Date(date));
       date.setDate(date.getDate() + 1);
     }
+
     return result;
   }
 
