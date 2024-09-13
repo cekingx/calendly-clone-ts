@@ -13,7 +13,7 @@ class Slot {
   end: Date;
 }
 
-class AvailableDay {
+export class AvailableDay {
   date: Date;
   slots: Slot[];
 }
