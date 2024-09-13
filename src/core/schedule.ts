@@ -28,12 +28,12 @@ class DateRange {
 
 export class TimeRange {
   start: number;
-  end: number;
+  duration: number;
 
-  static create(start: number, end: number): TimeRange {
+  static create(start: number, duration: number): TimeRange {
     const timerange = new TimeRange();
     timerange.start = start;
-    timerange.end = end;
+    timerange.duration = duration;
     return timerange;
   }
 
@@ -42,7 +42,7 @@ export class TimeRange {
   }
 
   getEnd(): string {
-    return this.translate(this.end);
+    return this.translate(this.start + this.duration);
   }
 
   private translate(second: number): string {

@@ -72,7 +72,7 @@ describe('Event', () => {
       ]
 
       const event = new Event();
-      event.duration = 60 * 60;
+      event.duration = 60 * 60 * 1000;
       event.name = 'Test name'
       event.schedule = schedule
 
@@ -81,7 +81,7 @@ describe('Event', () => {
       expect((result as AvailableDay[]).length).toEqual(4)
       expect((result as AvailableDay[])[0].slots.length).toEqual(1)
       expect((result as AvailableDay[])[0].slots[0].start).toEqual(new Date(Date.UTC(2024, 7, 5, 17, 0, 0)))
-      expect((result as AvailableDay[])[0].slots[0].end).toEqual(new Date(Date.UTC(2024, 7, 5, 18, 0, 0)))
+      expect((result as AvailableDay[])[0].slots[0].getEnd()).toEqual(new Date(Date.UTC(2024, 7, 5, 18, 0, 0)))
     })
   })
 })

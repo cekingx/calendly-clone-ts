@@ -10,7 +10,11 @@ class SlotParams {
 
 class Slot {
   start: Date;
-  end: Date;
+  duration: number;
+
+  getEnd(): Date {
+    return new Date(this.start.getTime() + this.duration);
+  }
 }
 
 export class AvailableDay {
@@ -39,11 +43,10 @@ export class Event {
           }
           for (const timerange of availability.hours) {
             const start = new Date(day.getTime() + timerange.start);
-            const end = new Date(day.getTime() + timerange.end)
-            available.slots.push({
-              start,
-              end
-            })
+            const slot = new Slot();
+            slot.start = start;
+            slot.duration = this.duration;
+            available.slots.push(slot)
           }
 
           result.push(available)
