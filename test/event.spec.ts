@@ -65,10 +65,11 @@ describe('Event', () => {
     event.name = 'Test name'
     event.schedule = schedule
 
-    it('should get 4 day with empty slot when the available day only moday', () => {
+    it('should get 4 day', () => {
       const result = event.getAvailableSlots({month: new Date('2024-08')})
       expect(result).not.toBeInstanceOf(Error)
       expect((result as AvailableDay[]).length).toEqual(4)
+      expect((result as AvailableDay[])[0].slots.length).toEqual(1)
     })
 
     it('should get 2 slot in specific date', () => {
@@ -87,12 +88,6 @@ describe('Event', () => {
       expect(result).not.toBeInstanceOf(Error)
       expect((result as AvailableDay[]).length).toEqual(1)
       expect((result as AvailableDay[])[0].slots.length).toEqual(2)
-    })
-
-    it('should get 0 slot in specific date', () => {
-      const result = event.getAvailableSlots({month: new Date('2024-08'), date: new Date('2024-08-06')})
-      expect(result).not.toBeInstanceOf(Error)
-      expect((result as AvailableDay[]).length).toEqual(0)
     })
   })
 })

@@ -31,29 +31,29 @@ export class Event {
     const result = []
     const dayInSlotParam = this.getDayInSlotParam(param);
 
-    if(param.date) {
-      const available: AvailableDay = {
-        date: new Date(param.date),
-        slots: []
-      }
+    // if(param.date) {
+    //   const available: AvailableDay = {
+    //     date: new Date(param.date),
+    //     slots: []
+    //   }
 
-      for(const availability of this.schedule.availableHours) {
-        if(dayOfDate(param.date) == availability.day) {
-          for(const hour of availability.hours) {
-            const slot = new Slot()
-            slot.start = new Date(param.date.getTime() + hour.start)
-            slot.duration = this.duration
-            available.slots.push(slot)
-          }
-        }
-      }
+    //   for(const availability of this.schedule.availableHours) {
+    //     if(dayOfDate(param.date) == availability.day) {
+    //       for(const hour of availability.hours) {
+    //         const slot = new Slot()
+    //         slot.start = new Date(param.date.getTime() + hour.start)
+    //         slot.duration = this.duration
+    //         available.slots.push(slot)
+    //       }
+    //     }
+    //   }
 
-      if(available.slots.length > 0) {
-        return [available]
-      } 
+    //   if(available.slots.length > 0) {
+    //     return [available]
+    //   } 
 
-      return []
-    }
+    //   return []
+    // }
 
     for (const day of dayInSlotParam) {
       for (const availability of this.schedule.availableHours) {
@@ -61,6 +61,13 @@ export class Event {
           const available: AvailableDay = {
             date: new Date(day),
             slots: []
+          }
+
+          for(const hour of availability.hours) {
+            const slot = new Slot()
+            slot.start = new Date(day.getTime() + hour.start)
+            slot.duration = this.duration
+            available.slots.push(slot)
           }
 
           result.push(available)
